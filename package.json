@@ -1,0 +1,20 @@
+{
+  "name": "gurbajbaseproject",
+  "version": "1.0.0",
+  "description": "hapi base cli",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Gurbaj",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^17.3.0",
+    "hapi-swagger": "^9.1.1",
+    "inert": "^5.1.0",
+    "is-port-free": "^1.0.7",
+    "tv": "^6.1.0",
+    "vision": "^5.3.2"
+  }
+}
