@@ -10,6 +10,8 @@
   "author": "Gurbaj",
   "license": "ISC",
   "dependencies": {
+    "catbox-mongodb": "^4.2.0",
+    "catbox-redis": "^4.1.0",
     "hapi": "^17.3.0",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",

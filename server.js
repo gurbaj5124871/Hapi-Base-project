@@ -1,11 +1,27 @@
 const Hapi = require('hapi')
 const isPortFree = require('is-port-free');
 
+const Config = require('./server-config')
 const Plugins = require('./plugins')
-console.log('Plugins: ',Plugins)
 //const Routes = require('./routes')
 
-const server = new Hapi.server({ host:'localhost', port:8000 });
+const server = new Hapi.server({
+  port: 8000,
+  cache: [
+    {
+      name: 'mongoCache',
+      engine: require('catbox-mongodb'),
+      host: '127.0.0.1',
+      partition: 'cache'
+    },
+    {
+      name: 'redisCache',
+      engine: require('catbox-redis'),
+      host: '127.0.0.1',
+      partition: 'cache'
+    }
+  ]
+});
 
 // Initilizing server setup
 (async () => {
