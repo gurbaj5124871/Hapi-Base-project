@@ -3,24 +3,26 @@ const isPortFree = require('is-port-free');
 
 const Config = require('./server-config')
 const Plugins = require('./plugins')
-//const Routes = require('./routes')
+const bootstrap = require('./source-code/db-bootstraping')
+
+const log = console.log
 
 const server = new Hapi.server({
-  port: 8000,
-  cache: [
-    {
-      name: 'mongoCache',
-      engine: require('catbox-mongodb'),
-      host: '127.0.0.1',
-      partition: 'cache'
-    },
-    {
-      name: 'redisCache',
-      engine: require('catbox-redis'),
-      host: '127.0.0.1',
-      partition: 'cache'
-    }
-  ]
+  port: Config.get('/port'),
+  // cache: [
+  //   {
+  //     name: 'mongoCache',
+  //     engine: require('catbox-mongodb'),
+  //     host: Config.get('/host'),
+  //     partition: 'cache'
+  //   },
+  //   {
+  //     name: 'redisCache',
+  //     engine: require('catbox-redis'),
+  //     host: Config.get('/host'),
+  //     partition: 'cache'
+  //   }
+  // ]
 });
 
 // Initilizing server setup
@@ -28,7 +30,7 @@ const server = new Hapi.server({
   try {
     
     // Checking if the port is free
-    await isPortFree(8000);
+    await isPortFree(Config.get('/port'));
       
     // Registering plugins
     await server.register(Plugins);
@@ -36,16 +38,19 @@ const server = new Hapi.server({
     // // // registering routes
     // // server.route(Routes)
 
+    // Initilizing database connection
+    bootstrap()
+    
     await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
+    log(`Server running at: ${server.info.uri}`);
       
   } catch (err) {
-    console.log(err)
+    log(err)
     process.exit(0)
   }
 })();
 
 process.on('unhandledRejection', (err) => {
-  console.log(err);
+  log(err);
   process.exit(1);
 });

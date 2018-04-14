@@ -12,10 +12,12 @@
   "dependencies": {
     "catbox-mongodb": "^4.2.0",
     "catbox-redis": "^4.1.0",
+    "confidence": "^3.0.2",
     "hapi": "^17.3.0",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
     "is-port-free": "^1.0.7",
+    "mongoose": "^5.0.13",
     "tv": "^6.1.0",
     "vision": "^5.3.2"
   }

@@ -5,6 +5,14 @@ const criteria = {
 }
 
 const config = {
+    host: {
+        $filter: 'env',
+        dev: '127.0.0.1',
+        test: '127.0.0.1',
+        staging: '127.0.0.1',
+        production: '127.0.0.1',
+        $default: 'localhost'
+    },
     port: {
         $filter: 'env',
         dev: 3001,
@@ -57,7 +65,6 @@ const config = {
             }
         }
     },
-
     swaggerDocumentationPage: {
         $filter: 'env',
         production: false,
@@ -89,4 +96,4 @@ const meta = (key, criteria) => {
     return store.meta(key, criteria)
 }
 
-exports = { get, meta }
+module.exports = { get, meta }

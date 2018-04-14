@@ -1,15 +1,11 @@
+const Config = require('../server-config')
+
+
 const swagger = {
     plugin: require('hapi-swagger'),
     options: {
-        info: {
-            title: 'Gurbaj Base Project V1',
-            version: 'V1.0.0',
-            contact: {
-                name: 'Gurbaj Singh',
-                email: 'singh.gurbaj5124871@gmail.com',
-            }
-        },
-        documentationPage: true,
+        info: Config.get('/swaggerInfo'),
+        documentationPage: Config.get('/swaggerDocumentationPage'),
         grouping: 'tags',
         schemes: ['http'],
         payloadType: 'form',
