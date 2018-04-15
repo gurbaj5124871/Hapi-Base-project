@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, trim: true, default: null },
   email: { type: String, trim: true, index: true, sparse: true },
   countryCode: { type: String, default: null },
-  countyrISOCode: { type: String, default: null },
+  countryISOCode: { type: String, default: null },
   mobile: { type: String, index: true, trim: true, sparse: true, default: null },
   contacts: [{
     mobile: { type: String },
@@ -71,12 +71,12 @@ const userSchema = new mongoose.Schema({
 
   facebookId: { type: String, default: null },
 
-  isBlocked: { type: Boolean, default: false, required: true, index: true },
-  isDeleted: { type: Boolean, default: false, required: true, index: true },
+  isBlocked: { type: Boolean, default: false, index: true },
+  isDeleted: { type: Boolean, default: false, index: true },
 
-  isAdminVerified: { type: Boolean, default: false, required: true, index: true },
-  isEmailVerified: { type: Boolean, default: false, required: true, index: true },
-  isPhoneVerified: { type: Boolean, default: false, required: true, index: true }
+  isAdminVerified: { type: Boolean, default: false, index: true },
+  isEmailVerified: { type: Boolean, default: false, index: true },
+  isPhoneVerified: { type: Boolean, default: false, index: true }
 }, { timestamps: true })
 
 userSchema.pre('save', function (next) {

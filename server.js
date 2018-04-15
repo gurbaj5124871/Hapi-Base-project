@@ -4,6 +4,7 @@ const isPortFree = require('is-port-free');
 const Config = require('./server-config')
 const Plugins = require('./plugins')
 const bootstrap = require('./source-code/db-bootstraping')
+const auth = require('./source-code/auth-strategies')
 
 const log = console.log
 
@@ -34,6 +35,9 @@ const server = new Hapi.server({
       
     // Registering plugins
     await server.register(Plugins);
+
+    // Initilizing autherization
+    await auth(server)
 
     // // // registering routes
     // // server.route(Routes)

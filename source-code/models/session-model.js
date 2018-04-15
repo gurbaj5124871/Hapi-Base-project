@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const appConfig = require('../configs/app-config')
 
 const sessionSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
-    admin: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
+    user: { type: mongoose.Schema.ObjectId, ref: 'User', index: true },
+    admin: { type: mongoose.Schema.ObjectId, ref: 'Admin', index: true },
     
     remoteIP: { type: String },
     deviceType: {
@@ -19,6 +19,6 @@ const sessionSchema = new mongoose.Schema({
 
     isSelfExpiry: { type: Boolean, default: appConfig.get('/isSessionSelfExpiry') },
     exipireAt: { type: Date, default: null }
-}, { timestamps: true });
+}, { timestamps: true })
 
 module.exports = mongoose.model('Session', sessionSchema)

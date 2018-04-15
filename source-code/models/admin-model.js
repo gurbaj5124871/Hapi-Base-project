@@ -18,13 +18,14 @@ const adminSchema = new mongoose.Schema({
     image: { type: String, default: null },
     thumbnail: { type: String, default: null },
     
-    isSuperAdmin: { type: Boolean, default: true },
+    isSuperAdmin: { type: Boolean, default: false },
     role: [{ type: String }],
     currentRole: { type: String, default: null, index: true },
     lang: { type: String, default: appConfig.get('/lang', { lang: 'en' }) },
     
-    isBlocked: { type: Boolean, default: false, required: true, index: true },
-    isDeleted: { type: Boolean, default: false, required: true, index: true }
+    isBlocked: { type: Boolean, default: false, index: true },
+    isDeleted: { type: Boolean, default: false, index: true },
+    isAdminVerified: { type: Boolean, default: false, index: true }
     
   }, { timestamps: true })
 

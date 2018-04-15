@@ -1,5 +1,5 @@
-module.exports = [
-    require('./user-model'),
-    require('./admin-model'),
-    require('./session-model')
-]
+module.exports = {
+    userModel: require('./user-model'),
+    adminModel: require('./admin-model'),
+    sessionModel: require('./session-model')
+}
