@@ -51,9 +51,9 @@ const userSchema = new mongoose.Schema({
     countyrISOCode: { type: String, default: null },
   }],
 
-  password: { type: String, required: false },
+  password: { type: String, default: null },
 
-  emailVerificationToken: { type: String, required: false },
+  emailVerificationToken: { type: String, default: null },
   emailVerificationTokenUpdatedAt: { type: Date },
   utcoffset: { type: Number },
   passwordResetToken: { type: String, default: null },
@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema({
   image: { type: String, default: null },
   thumbnami: { type: String, default: null },
 
-  role: [{ type: String }],
+  roles: [{ type: String }],
   currentRole: { type: String, default: null, index: true },
   lang: { type: String, default: appConfig.get('/lang', { lang: 'en' }) },
 

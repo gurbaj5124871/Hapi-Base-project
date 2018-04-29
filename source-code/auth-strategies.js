@@ -13,7 +13,8 @@ async function autherization(server) {
         validate: async (request, token, h) => {
             try {
                 const token = authServices.verifyAuthToken(token)
-                return { isValid: true, token }
+                const session = await sessionServices.getSessionDetails(token.sessionID)
+                return { isValid: true, session }
             }
             catch (e) {
                 return { isValid: false, e }
@@ -21,14 +22,14 @@ async function autherization(server) {
         }
     });
 
-    server.auth.strategy('jwtAuth', 'bearer-access-token', {
+    server.auth.strategy('userAuth', 'bearer-access-token', {
         allowQueryToken: false,
         allowMultipleHeaders: true,
         accessTokenName: 'accessToken',
         validate: async (request, token, h) => {
             try {
                 const token = authServices.verifyAuthToken(token)
-                const session = sessionServices.verifySession(token.sessionID, token.role)
+                const session = await sessionServices.verifyUserSession(token.sessionID, token.role)
                 return { isValid: true, session }
             }
             catch (e) {
@@ -37,14 +38,15 @@ async function autherization(server) {
         }
     })
 
-    server.auth.strategy('JwtAuthWithDeviceUpdate', 'bearer-access-token', {
+    server.auth.strategy('adminAuth', 'bearer-access-token', {
         allowQueryToken: false,
         allowMultipleHeaders: true,
         accessTokenName: 'accessToken',
         validate: async (request, token, h) => {
             try {
                 const token = authServices.verifyAuthToken(token)
-                const session = sessionServices.verifySession(token.sessionID, token.role)
+                const session = await sessionServices.verifyAdminSession(token.sessionID, token.role)
+
                 return { isValid: true, session }
             }
             catch (e) {
@@ -53,7 +55,7 @@ async function autherization(server) {
         }
     })
 
-    server.auth.default('jwtAuth')
+    server.auth.default('userAuth')
 
 }
 

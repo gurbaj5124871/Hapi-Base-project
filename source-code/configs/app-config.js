@@ -63,8 +63,28 @@ const config = {
         $default: 'http://localhost:3001/#/resetPassword',
     },
 
-
-    jwtSecretKey: 'SyPMIaUEb1499022862927'
+    swaggerDefaultResponseMessages: [
+        {
+          code: 200,
+          message: 'OK',
+        },
+        {
+          code: 400,
+          message: 'Bad Request',
+        },
+        {
+          code: 401,
+          message: 'Unauthorized',
+        },
+        {
+          code: 404,
+          message: 'Data Not Found',
+        },
+        {
+          code: 500,
+          message: 'Internal Server Error',
+        }
+      ]
 
 }
 
