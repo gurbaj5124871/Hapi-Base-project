@@ -55,8 +55,6 @@ async function autherization(server) {
         }
     })
 
-    server.auth.default('userAuth')
-
 }
 
 module.exports = autherization

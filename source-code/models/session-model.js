@@ -5,6 +5,7 @@ const appConfig = require('../configs/app-config')
 const sessionSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.ObjectId, ref: 'User', index: true },
     admin: { type: mongoose.Schema.ObjectId, ref: 'Admin', index: true },
+    role: { type: String, required: true },
     
     remoteIP: { type: String },
     deviceType: {

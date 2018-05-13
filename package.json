@@ -10,18 +10,20 @@
   "author": "Gurbaj",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^2.0.1",
+    "bluebird": "^3.5.1",
     "catbox-mongodb": "^4.2.0",
     "catbox-redis": "^4.1.0",
     "confidence": "^3.0.2",
-    "hapi": "^17.3.0",
+    "hapi": "^17.4.0",
     "hapi-auth-bearer-token": "^6.0.1",
     "hapi-swagger": "^9.1.1",
     "inert": "^5.1.0",
     "is-port-free": "^1.0.7",
     "joi": "^13.1.2",
     "jsonwebtoken": "^8.2.1",
+    "lodash": "^4.17.10",
     "mongoose": "^5.0.13",
-    "tv": "^6.1.0",
     "vision": "^5.3.2"
   }
 }

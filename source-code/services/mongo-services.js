@@ -1,64 +1,63 @@
 // CRUD Services for mongodb
-const model = require('../models')
 
-const createOne = async (modelName, doc) => {
-    return new model[modelName](doc).saveAsync()
+const createOne = async (model, doc) => {
+    return new model(doc).saveAsync()
 }
 
-const insertMany = async (modelName, docs) => {
-    return new Promise((res, rej) => { model[modelName].insertMany(docs, (e, data) => { if (e) { rej(e) } else { res(data) } }) })
+const insertMany = async (model, docs) => {
+    return new Promise((res, rej) => { model.insertMany(docs, (e, data) => { if (e) { rej(e) } else { res(data) } }) })
 }
 
-const find = async(modelName, criteria, projection, options) => {
-    return model[modelName].findAsync(criteria, projection, options)
+const find = async(model, criteria, projection, options) => {
+    return model.findAsync(criteria, projection, options)
 }
 
-const findOne = async (modelName, criteria, projection, options) => {
-    return model[modelName].findOneAsync(criteria, projection, options)
+const findOne = async (model, criteria, projection, options) => {
+    return model.findOneAsync(criteria, projection, options)
 }
 
-const count = async (modelName, criteria) => {
-    return model[modelName].countAsync(criteria)
+const count = async (model, criteria) => {
+    return model.countAsync(criteria)
 }
 
-const findOneAndUpdate = async (modelName, criteria, updation, options) => {
-    return model[modelName].findOneAndUpdateAsync(criteria, updation, options)
+const findOneAndUpdate = async (model, criteria, updation, options) => {
+    return model.findOneAndUpdateAsync(criteria, updation, options)
 }
 
-const update = async (modelName, criteria, updation, options) => {
+const update = async (model, criteria, updation, options) => {
     options.multi = true
-    return model[modelName].updateAsync(criteria, updation, options)
+    return model.updateAsync(criteria, updation, options)
 }
 
-const findOneAndRemove = async (modelName, criteria) => {
-    return model[modelName].findOneAndRemoveAsync(criteria)
+const findOneAndRemove = async (model, criteria) => {
+    return model.findOneAndRemoveAsync(criteria)
 }
 
-const deleteMany = async (modelName, criteria) => {
-    return model[modelName].deleteManyAsync(criteria);
+const deleteMany = async (model, criteria) => {
+    return model.deleteManyAsync(criteria);
 }
 
-const aggregate = async (modelName, pipeline) => {
-    return model[modelName].aggregateAsync(pipeline)
+const aggregate = async (model, pipeline) => {
+    return model.aggregateAsync(pipeline)
 }
 
-const bulkWrite = async (modelName, operations, options) => {
+const bulkWrite = async (model, operations, options) => {
     const opts = Object.extend({}, options || {})
     opts.ordered = (typeof opts.ordered == 'boolean') ? opts.ordered : true
-    return model[modelName].bulkWrite(operations, opts)
+    return model.bulkWrite(operations, opts)
 }
 
-const findStream = async (modelName, pipeline) => {
-    return model[modelName].findAsync(pipeline).cursor().exec().stream()
+const findStream = async (model, pipeline) => {
+    return model.findAsync(pipeline).cursor().exec().stream()
 }
 
-const aggregateStream = async (modelName, pipeline) => {
-    return model[modelName].aggregate(pipeline).cursor().exec().stream()
+const aggregateStream = async (model, pipeline) => {
+    return model.aggregate(pipeline).cursor().exec().stream()
 }
 
-const insertManyWithPopulate = async (modelName, arrayToSave, populateOptions) => {
+const insertManyWithPopulate = async (model, arrayToSave, populateOptions) => {
     return new Promise((res, rej) => {
-        model[modelName].insertMany(arrayToSave, (e, docs) => { if (e) { rej(e) } else { model[modelName].populate(docs, populateOptions, (e, data) => { if (e) { rej(err) } else { res(data) } }) } })
+        model.insertMany(arrayToSave, (e, docs) => { if (e) { rej(e) } else { model.populate(docs, populateOptions, (e, data) => { if (e) { rej(err) } else { res(data) } }) } })
     })
 }
 

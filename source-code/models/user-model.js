@@ -1,9 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const bluebird = require('bluebird')
+const bcrypt = bluebird.promisifyAll(require('bcrypt'))
 
 const appConfig = require('../configs/app-config')
 
 const customerSchema = new mongoose.Schema({
-  customCustomerID: { type: String },
+  customerID: { type: String },
   totalRatingPoints: { type: Number, default: 0 },
   ratedByUserCount: { type: Number, default: 0 },
 
@@ -11,7 +13,7 @@ const customerSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const serviceProviderSchema = new mongoose.Schema({
-  customServiceProviderID: { type: String },
+  serviceProviderID: { type: String },
   totalRatingPoints: { type: Number, default: 0 },
   ratedByUserCount: { type: Number, default: 0 },
 
@@ -19,7 +21,7 @@ const serviceProviderSchema = new mongoose.Schema({
 })
 
 const driverSchema = new mongoose.Schema({
-  customDriverID: { type: String },
+  driverID: { type: String },
   totalRatingPoints: { type: Number, default: 0 },
   ratedByUserCount: { type: Number, default: 0 },
 
@@ -35,28 +37,17 @@ const driverSchema = new mongoose.Schema({
 driverSchema.index({ currentLocation: '2dsphere' })
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, trim: true, index: true, default: null, sparse: true },
+  firstName: { type: String, trim: true, required: true, index: true, sparse: true },
   lastName: { type: String, trim: true, default: null },
-  email: { type: String, trim: true, index: true, sparse: true },
+  email: { type: String, trim: true, required: true, index: true, sparse: true },
   countryCode: { type: String, default: null },
   countryISOCode: { type: String, default: null },
   mobile: { type: String, index: true, trim: true, sparse: true, default: null },
-  contacts: [{
-    mobile: { type: String },
-    isVerified: { type: Boolean, default: false, index: true },
-    isPrimary: { type: Boolean, default: false },
-    mobileOTP: { type: Number },
-    countryCode: { type: String },
-    otpUpdatedAt: { type: Date },
-    countyrISOCode: { type: String, default: null },
-  }],
 
   password: { type: String, default: null },
-
-  emailVerificationToken: { type: String, default: null },
-  emailVerificationTokenUpdatedAt: { type: Date },
-  utcoffset: { type: Number },
   passwordResetToken: { type: String, default: null },
+
+  utcoffset: { type: Number },
 
   image: { type: String, default: null },
   thumbnami: { type: String, default: null },
@@ -76,26 +67,43 @@ const userSchema = new mongoose.Schema({
 
   isAdminVerified: { type: Boolean, default: false, index: true },
   isEmailVerified: { type: Boolean, default: false, index: true },
-  isPhoneVerified: { type: Boolean, default: false, index: true }
+  isPhoneVerified: { type: Boolean, default: false, index: true },
+
+  mobileOTP: { type: Number },
+  otpUpdatedAt: { type: Date },
+  changeMobile: { type: {
+    mobile: { type: String },
+    mobileOTP: { type: Number },
+    countryCode: { type: String },
+    otpUpdatedAt: { type: Date },
+    countryISOCode: { type: String, default: null },
+  }, default: null },
+
+  emailVerificationToken: { type: String, default: null },
+  emailVerificationTokenUpdatedAt: { type: Date },
 }, { timestamps: true })
 
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function (next) {
   const user = this
-  if (!user.isModified('password')) return next()
-
-  // Function to hash the password
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 10)
+  }
 
   return next()
 })
 
-userSchema.pre('findOneAndUpdate', function () {
-  // Function to hash the password
-  const password = this.getUpdate().$set.password
+// userSchema.pre('findOneAndUpdate', async () => {
 
-  if (!password)
-    return
+//   const password = generateHashPassword(this.getUpdate().$set.password)
 
-  this.findOneAndUpdate({}, { password })
-})
+//   if (!password)
+//     return
+
+//   this.findOneAndUpdate({}, { password })
+// })
+
+async function generateHashPassword (pass) {
+  return await bcrypt.hash(pass, 10)
+}
 
 module.exports = mongoose.model('User', userSchema)
