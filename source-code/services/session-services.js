@@ -1,4 +1,6 @@
 const boom = require('boom')
+const moment = require('moment')
+
 const models = require('./../models')
 const mongoServices = require('./mongo-services')
 const appConfig = require('./../configs/app-config')
@@ -15,6 +17,11 @@ const getSessionDetails = async sessionID => {
         if (!sess)
             throw boom.unauthorized('Session Expired')
 
+        if (sess.isSelfExpiry && moment().isAfter(sess.expireAt)) {
+            mongoServices.findOneAndRemove(models.session, { _id: sessionID })
+            throw boom.unauthorized('Session Expired')
+        }
+
         return sess
     }
     catch (e) {
@@ -22,9 +29,8 @@ const getSessionDetails = async sessionID => {
     }
 }
 
-const verifyUserSession = async (sessionID, role) => {
+const verifyUser = (sess, role) => {
     try {
-        const sess = await getSessionDetails(sessionID)
 
         if (!sess.user)
             throw boom.unauthorized('Session Expired')
@@ -62,7 +68,7 @@ const verifyUserSession = async (sessionID, role) => {
         if (role === appConfig.get('/roles/serviceProvider') && sess.user.serviceProvider.isBlocked)
             throw boom.badRequest('Your Account is Blocked. Please contact admin')
 
-        return sess
+        return true
 
     }
     catch (e) {
@@ -70,9 +76,8 @@ const verifyUserSession = async (sessionID, role) => {
     }
 }
 
-const verifyAdminSession = async (sessionID, role) => {
+const verifyAdmin = (sess, role) => {
     try {
-        const sess = await getSessionDetails(sessionID)
 
         if (!sess.admin)
             throw boom.unauthorized('Session Expired')
@@ -86,6 +91,25 @@ const verifyAdminSession = async (sessionID, role) => {
         if (!sess.admin.isAdminVerified && !sess.admin.isSuperAdmin)
             throw boom.badRequest('Your Account is not admin verified yet. Please contact admin')
 
+        return true
+    }
+    catch (e) {
+        throw e
+    }
+}
+
+const createUserSession = async (userID, role, remoteIP, deviceType, deviceToken) => {
+    try {
+        // Flush older sessions
+        await mongoServices.deleteMany(models.session, { user: userID })
+
+        const session = {
+            user: userID,
+            role, remoteIP,
+            deviceType, deviceToken
+        }
+
+        const sess = await mongoServices.createOne(models.session, session)
         return sess
     }
     catch (e) {
@@ -113,8 +137,9 @@ const updateSession = async (sessionID, deviceType, deviceToken) => {
 }
 
 module.exports = {
-    verifyUserSession,
-    verifyAdminSession,
+    verifyUser,
+    verifyAdmin,
     getSessionDetails,
+    createUserSession,
     updateSession
 }

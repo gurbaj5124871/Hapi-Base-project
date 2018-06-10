@@ -47,8 +47,8 @@ const bulkWrite = async (model, operations, options) => {
     return model.bulkWrite(operations, opts)
 }
 
-const findStream = async (model, pipeline) => {
-    return model.findAsync(pipeline).cursor().exec().stream()
+const findStream = async (model, match) => {
+    return model.findAsync(match).cursor().exec().stream()
 }
 
 const aggregateStream = async (model, pipeline) => {

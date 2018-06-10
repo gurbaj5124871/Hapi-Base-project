@@ -9,16 +9,14 @@ const customerRoutes = [
         method: 'POST',
         path: '/customer/register',
         handler: async (request, h) => {
-            const payloadData = request.payload
+            const payload = request.payload
             const headers = request.headers
             const remoteIP = request.info.remoteAddress
             try {
-                console.log('>>>>>>>>>>>>>> in side handler >>>>>>>>>>>>>>>>>')
-                const data = await crtls.customerController.registerCustomer(headers, payloadData, remoteIP)
+                const data = await crtls.customerController.registerCustomer(headers, payload, remoteIP)
                 return commFunc.sendSuccess(data)
             }
             catch (e) {
-                console.log(e)
                 return e
             }
         },

@@ -19,7 +19,7 @@ const sessionSchema = new mongoose.Schema({
     deviceToken: { type: String },
 
     isSelfExpiry: { type: Boolean, default: appConfig.get('/isSessionSelfExpiry') },
-    exipireAt: { type: Date, default: null }
+    expireAt: { type: Date, default: null, expires: 0 }
 }, { timestamps: true })
 
 module.exports = mongoose.model('Session', sessionSchema)

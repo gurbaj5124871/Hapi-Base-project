@@ -46,6 +46,9 @@ const server = new Hapi.server({
     // Initilizing database connection
     bootstrap()
 
+    // Initilize scripts invoked
+    require('./source-code/initilize-scripts')
+
     await server.start()
     log(`Server running at: ${server.info.uri}`);
 

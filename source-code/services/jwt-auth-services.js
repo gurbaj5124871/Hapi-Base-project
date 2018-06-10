@@ -1,5 +1,10 @@
-const jwt = require('jsonwebtoken')
+const bluebird = require('bluebird')
+const jwt = bluebird.promisifyAll(require('jsonwebtoken'))
+const fs = require('fs')
+
 const jwtConfig = require('../configs/jwt-auth-config')
+const privateKey = fs.readFileSync(`${__dirname}/../../certs/jwtPrivate.pem`)
+const publicKey = fs.readFileSync(`${__dirname}/../../certs/jwtPublic.pem`)
 
 const createAuthToken = async (sessionID, role) => {
     const data = { sessionID, role }
@@ -9,12 +14,12 @@ const createAuthToken = async (sessionID, role) => {
     if (jwtConfig.get('/doesTokenExpires', { role: data.scope }))
         opts.notBefore = jwtConfig.get('/tokenExpirationTime', { role: data.scope })
 
-    return token = jwt.sign(data, jwtConfig.get('/privateKey'), opts)
+    return token = jwt.signAsync(data, privateKey, opts)
 }
 
 const verifyAuthToken = async token => {
     try{
-        return tokenData = jwt.verify(token, jwtConfig.get('/publicKey'))
+        return tokenData = jwt.verifyAsync(token, publicKey)
     }
     catch(e){
         throw boom.unauthorized('Token is invalid')

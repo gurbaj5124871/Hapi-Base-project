@@ -3,6 +3,7 @@ const Confidence = require('confidence');
 const config = {
 
     roles: {
+        superAdmin: 'superAdmin',
         admin: 'admin',
         customer: 'customer',
         driver: 'driver',

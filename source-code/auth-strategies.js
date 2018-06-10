@@ -29,7 +29,8 @@ async function autherization(server) {
         validate: async (request, token, h) => {
             try {
                 const token = authServices.verifyAuthToken(token)
-                const session = await sessionServices.verifyUserSession(token.sessionID, token.role)
+                const session = await sessionServices.getSessionDetails(token.sessionID)
+                await sessionServices.verifyUser(session, token.role)
                 return { isValid: true, session }
             }
             catch (e) {
@@ -45,8 +46,8 @@ async function autherization(server) {
         validate: async (request, token, h) => {
             try {
                 const token = authServices.verifyAuthToken(token)
-                const session = await sessionServices.verifyAdminSession(token.sessionID, token.role)
-
+                const session = await sessionServices.getSessionDetails(token.sessionID)
+                await sessionServices.verifyAdmin(session, token.role)
                 return { isValid: true, session }
             }
             catch (e) {

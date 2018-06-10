@@ -5,7 +5,7 @@ const appConfig = require('../configs/app-config')
 const adminSchema = new mongoose.Schema({ 
     firstName: { type: String, trim: true, default: null },
     lastName: { type: String, trim: true, default: null },
-    email: { type: String, trim: true, index: true, sparse: true },
+    email: { type: String, trim: true, index: true, sparse: true, required: true },
     countryCode: { type: String, default: null },
     countyrISOCode: { type: String, default: null },
     mobile: { type: String, index: true, trim: true, sparse: true, default: null },
@@ -18,8 +18,7 @@ const adminSchema = new mongoose.Schema({
     image: { type: String, default: null },
     thumbnail: { type: String, default: null },
     
-    isSuperAdmin: { type: Boolean, default: false },
-    role: [{ type: String }],
+    roles: [{ type: String }],
     currentRole: { type: String, default: null, index: true },
     lang: { type: String, default: appConfig.get('/lang', { lang: 'en' }) },
     
