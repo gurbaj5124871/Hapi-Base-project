@@ -10,7 +10,7 @@
   "author": "Gurbaj",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^2.0.1",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.1",
     "catbox-mongodb": "^4.2.0",
     "catbox-redis": "^4.1.0",
